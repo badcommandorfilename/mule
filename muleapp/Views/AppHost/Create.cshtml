@@ -1,0 +1,19 @@
+﻿@model AppHost
+
+<div>
+    <p class="control">
+        @using (Html.BeginForm("Create", "AppHost"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.EditorForModel()
+
+            <br />
+            <div class="form-group columns">
+                <div class="column">
+                    <input type="submit" value="Save" class="button is-success" />
+                    @{Html.RenderPartial("Delete", Model);}
+                </div>
+            </div>
+        }
+    </p>
+</div>

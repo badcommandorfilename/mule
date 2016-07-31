@@ -1,0 +1,51 @@
+﻿@using static Mule.ModelService;
+@model IEnumerable<AppHost>
+
+@section scripts{
+<script type="text/javascript" >
+    function show_form() {
+        $("#form").show();
+    }
+
+    function set_edit(obj) {
+        for (var k in obj) {
+            $("#" + k).val(obj[k]);
+        }
+        show_form();
+    }
+</script>
+}
+<div class="box">
+    <table class="table is-striped">
+        <thead>
+            <tr>
+                @foreach (var col in GetPropertyInfo(Model.GetType()))
+                {
+                    <th>@col.Name.ToString()</th>
+                }
+                <th><a href="#" class="button is-info" onclick="show_form()">New</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model)
+            {
+                <tr>
+                    @foreach (var col in GetPropertyValues(row))
+                    {
+                        <td>@col.Value.ToString()</td>
+                    }
+                    <td><a href="#" class="button" onclick="set_edit(@ToJSON(row))">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div hidden id="form" >
+    <div class="box">
+        <div class="columns">
+            <div class="column">
+                @{Html.RenderPartial("Create", new AppHost());}
+            </div>
+        </div>
+    </div>
+</div>

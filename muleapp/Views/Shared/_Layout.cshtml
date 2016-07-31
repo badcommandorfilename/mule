@@ -1,0 +1,77 @@
+﻿@using System.Diagnostics;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Magical Unicorn Land (Enterprise Edition)</title>
+    <link href="~/css/site.min.css" rel="stylesheet" />
+    <script src="~/js/site.min.js" type="text/javascript"></script>
+    @if ((ViewData["Ponies"] as bool?) ?? false)
+    {
+        <script type="text/javascript" src="https://panzi.github.io/Browser-Ponies/basecfg.js" id="browser-ponies-config"></script>
+        <script type="text/javascript" src="https://panzi.github.io/Browser-Ponies/browserponies.js" id="browser-ponies-script"></script>
+        <script type="text/javascript">/* <![CDATA[ */ (function (cfg) {BrowserPonies.setBaseUrl(cfg.baseurl);BrowserPonies.loadConfig(BrowserPoniesBaseConfig);BrowserPonies.loadConfig(cfg);})({"baseurl":"https://panzi.github.io/Browser-Ponies/","fadeDuration":500,"volume":0,"fps":25,"speed":3,"audioEnabled":false,"showFps":false,"showLoadProgress":false,"speakProbability":0.1,"spawn":{"applejack":1,"fluttershy":1,"pinkie pie":1,"rainbow dash":1,"rarity":1,"twilight sparkle":1},"autostart":true}); /* ]]> */</script>
+    }
+
+</head>
+<body>
+    <div class="main">
+        <section class="hero box">
+            <div class="hero-body">
+                <div class="container is-fluid">
+                    <div class="columns">
+                        <div class="column">
+                            <img src="~/img/unikitty.png" />
+                        </div>
+                        <div class="column">
+                            <p class="title">
+                                <b>M U L E</b>
+                            </p>
+                            <p class="subtitle">
+                            <p>Magical Unicorn Land</p>
+                            <p>
+                                <small>
+                                    <i>Enterprise Edition</i>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br />
+        <section>
+            <div>
+                @RenderBody()
+            </div>
+        </section>
+        <div class="push">
+            <br />
+        </div>
+        <div class="push">
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+        <footer>
+            <div class="container">
+                <div class="content has-text-centered">
+                    <div class="columns">
+                        <div class="column">
+                            <strong>Magical Unicorn Land</strong> by <a href="https://github.com/badcommandorfilename/">Alex Jarkey</a>
+                        </div>
+                        <div class="column">
+                            Completed in @((ViewData["Stopwatch"] as Stopwatch).ElapsedMilliseconds) ms
+                        </div>
+                        
+                        <div class="column">
+                            <a href="https://github.com/badcommandorfilename/mule" class="button is-dark is-outlined">Clone A Mule!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+        @RenderSection("scripts", required: false)
+</body>
+</html>

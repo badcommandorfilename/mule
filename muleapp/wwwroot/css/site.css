@@ -1,0 +1,26 @@
+body {
+    background-image: url("/img/unicorn_bg.png");
+    background-repeat:no-repeat;
+    background-position: center center;
+    background-attachment:fixed;
+    background-size:cover;
+}
+html, body {
+}
+.main {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -100px;
+    max-width: 50em;
+}
+.main::after {
+  content: "";
+  height: 100px;
+  max-height: 100px !important;
+  display: block;
+}
+.footer, .push {
+	height: 100px;
+    max-height: 100px !important;
+}

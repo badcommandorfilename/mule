@@ -1,0 +1,11 @@
+﻿@model AppHost
+
+<script type="text/javascript">
+function do_delete() {
+    var form = $("form")[0];
+    form.action = '@Url.Action("Delete")';
+    form.submit();
+}
+</script>
+
+<input type="button" value="Delete" onclick="do_delete()" class="button is-danger" />
