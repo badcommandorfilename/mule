@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Mule.Controllers
 {
@@ -20,11 +16,15 @@ namespace Mule.Controllers
             AppHosts = apphosts;
         }
 
+        /// <summary>
+        /// Called before each request
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var sw = new Stopwatch();
             sw.Start();
-            ViewData["Title"] = nameof(AppHosts);
+            ViewData["Title"] = typeof(AppHost).Name;
             ViewData["Ponies"] = new Random().NextDouble() > 0.9;
             ViewData["Stopwatch"] = sw;
             base.OnActionExecuting(context);

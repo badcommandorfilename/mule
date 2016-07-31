@@ -4,7 +4,6 @@
     <p class="control">
         @using (Html.BeginForm("Create", "AppHost"))
         {
-            @Html.AntiForgeryToken()
             @Html.EditorForModel()
 
             <br />

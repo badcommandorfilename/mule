@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Mule
 {
@@ -30,6 +28,9 @@ namespace Mule
         public IEnumerable<Attribute> Attributes { get { return p.GetCustomAttributes(); } }
     }
 
+    /// <summary>
+    /// Utilities to automatically inspect or display the properties of models
+    /// </summary>
     public static class ModelService
     {
         public static string ToJSON(object model)
@@ -44,6 +45,7 @@ namespace Mule
         /// <returns></returns>
         public static IEnumerable<PropertyInfo> GetPropertyInfo(Type type)
         {
+            //For collections (Arrays and Enumerables), get the properties of the inner type
             if (typeof(IEnumerable).IsAssignableFrom(type))
             {
                 var innertype = from i in type.GetInterfaces()
@@ -52,6 +54,7 @@ namespace Mule
                                 select i.GetGenericArguments()[0];
                 return innertype.First().GetProperties();
             }
+            //For normal types, get the public properties
             return type.GetProperties();
         }
 

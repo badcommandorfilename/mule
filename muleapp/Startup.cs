@@ -51,7 +51,11 @@ namespace Mule
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = context =>
+                context.Context.Response.Headers.Add("Cache-Control", "public, max-age=86400")
+            });
 
             app.UseMvc();
         }

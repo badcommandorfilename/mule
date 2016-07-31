@@ -58,14 +58,14 @@
                 <div class="content has-text-centered">
                     <div class="columns">
                         <div class="column">
-                            <strong>Magical Unicorn Land</strong> by <a href="https://github.com/badcommandorfilename/">Alex Jarkey</a>
+                            <p class="notification"><strong>Magical Unicorn Land</strong> by <a href="https://github.com/badcommandorfilename/">Alex Jarkey</a></p>
                         </div>
                         <div class="column">
-                            Completed in @((ViewData["Stopwatch"] as Stopwatch).ElapsedMilliseconds) ms
+                            <p class="notification"><small>@(AppContext.TargetFrameworkName), completed in @((ViewData["Stopwatch"] as Stopwatch).ElapsedMilliseconds) ms</small></p>
                         </div>
                         
                         <div class="column">
-                            <a href="https://github.com/badcommandorfilename/mule" class="button is-dark is-outlined">Clone A Mule!</a>
+                            <p class="notification"><a href="https://github.com/badcommandorfilename/mule" class="button is-dark is-outlined" style="{}">Clone A Mule!</a></p>
                         </div>
                     </div>
                 </div>

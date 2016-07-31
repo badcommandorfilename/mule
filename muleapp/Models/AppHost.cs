@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,34 +6,31 @@ using System.Linq;
 
 namespace Mule
 {
+    /// <summary>
+    /// Example data representation of application servers
+    /// </summary>
     public class AppHost
     {
-        [Key]
+        [Key]//Unique id for object
         public string URL { get; set; } = "";
+        [Required] //Property cannot be null
         public string Version { get; set; } = "";
+        [Required] //Property cannot be null
         public string Owner { get; set; } = "";
-        [HiddenInput(DisplayValue = false)]
+        [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        private DateTime touch() => Updated = DateTime.Now;
+        public DateTime Touch() => Updated = DateTime.Now;
 
-        public override bool Equals(object obj)
-        {
-            if(obj is AppHost)
-            {
-                return URL == (obj as AppHost).URL;
-            }
-            return false;
-        }
+        /// Equality Comparer (determines if row will be overwritten or created)
+        public override bool Equals(object obj) => URL == (obj as AppHost)?.URL;
 
-        public override int GetHashCode()
-        {
-            return URL.GetHashCode();
-        }
+        /// Unique key definition (use primary key)
+        public override int GetHashCode() => URL.GetHashCode();
     }
 
     /// <summary>
-    /// Access to repository of AppHosts from SQLite SQLiteContext
+    /// Access to SQLite repository of AppHosts from SQLiteContext
     /// </summary>
     public class AppHostRepository : IRepository<AppHost>
     {
@@ -67,6 +63,7 @@ namespace Mule
 
         public AppHost Update(AppHost item)
         {
+            item.Touch();
             _context.Update(item);
             _context.SaveChanges();
             return item;
