@@ -11,12 +11,13 @@ namespace Mule
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
                 .Build();
 
             var host = new WebHostBuilder()
-                .UseConfiguration(config)
                 .UseKestrel()
-                .UseUrls("http://0.0.0.0:80")
+                .UseConfiguration(config)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
