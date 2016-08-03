@@ -15,8 +15,8 @@ namespace Mule
         public string URL { get; set; } = "";
         [Required] //Property cannot be null
         public string Version { get; set; } = "";
-        [Required] //Property cannot be null
-        public string Owner { get; set; } = "";
+        [DataType(DataType.MultilineText)] //Input style/formatting hint
+        public string Description { get; set; } = "";
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
