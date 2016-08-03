@@ -13,6 +13,12 @@
         }
         show_form();
     }
+
+    function set_new(){
+        $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+        $(':checkbox, :radio').prop('checked', false);
+        show_form();
+    }
 </script>
 }
 <div class="box">
@@ -23,7 +29,7 @@
                 {
                     <th>@col.Name.ToString()</th>
                 }
-                <th><a href="#" class="button is-info" onclick="show_form()">New</a></th>
+                <th><a href="#" class="button is-info" onclick="set_new()">New</a></th>
             </tr>
         </thead>
         <tbody>

@@ -46,9 +46,7 @@ namespace Mule.Controllers
                             select x).FirstOrDefault();
             if (existing != null)
             {
-                existing.Version = item.Version;
-                existing.Owner = item.Owner;
-                AppHosts.Update(existing);
+                AppHosts.Update(existing, item);
             }
             else
             {

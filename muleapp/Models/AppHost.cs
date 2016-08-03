@@ -61,12 +61,22 @@ namespace Mule
             return _context.AppHosts.AsEnumerable();
         }
 
-        public AppHost Update(AppHost item)
+        public AppHost Update(AppHost existing, AppHost item = null)
         {
-            item.Touch();
-            _context.Update(item);
+            if(item != null)
+            {
+                var vals = ModelService.GetPropertyValues(item);
+                foreach(var prop in ModelService.GetPropertyInfo(typeof(AppHost)))
+                {
+                    var newprop = vals.Where(x => x.Name == prop.Name).FirstOrDefault()?.Value;
+                    prop.SetValue(existing, newprop);
+                }
+            }
+
+            existing.Touch();
+            _context.Update(existing);
             _context.SaveChanges();
-            return item;
+            return existing;
         }
 
         public int Delete(AppHost item)
