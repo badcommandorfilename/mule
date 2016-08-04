@@ -30,7 +30,7 @@ namespace Mule
                 );
 
             services.AddMvc();
-            services.AddScoped<IRepository<AppHost>, AppHostRepository>();
+            services.AddScoped<IRepository<AppHost>, Repository<AppHost>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +46,7 @@ namespace Mule
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Shared/Error");
             }
 
             app.UseStaticFiles(new StaticFileOptions

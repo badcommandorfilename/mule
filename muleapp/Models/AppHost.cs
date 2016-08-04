@@ -13,14 +13,21 @@ namespace Mule
     {
         [Key]//Unique id for object
         public string URL { get; set; } = "";
+
+        string version = "";
         [Required] //Property cannot be null
-        public string Version { get; set; } = "";
+        public string Version { get { return version; } set { version = value ?? ""; } }
+
         [DataType(DataType.MultilineText)] //Input style/formatting hint
         public string Description { get; set; } = "";
+
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        public DateTime Touch() => Updated = DateTime.Now;
+        public AppHost()
+        {
+
+        }
 
         /// Equality Comparer (determines if row will be overwritten or created)
         public override bool Equals(object obj) => URL == (obj as AppHost)?.URL;
@@ -28,62 +35,4 @@ namespace Mule
         /// Unique key definition (use primary key)
         public override int GetHashCode() => URL.GetHashCode();
     }
-
-    /// <summary>
-    /// Access to SQLite repository of AppHosts from SQLiteContext
-    /// </summary>
-    public class AppHostRepository : IRepository<AppHost>
-    {
-        readonly SQLiteContext _context;
-        public AppHostRepository(SQLiteContext context)
-        {
-            _context = context;
-            try
-            {
-                context.Database.EnsureCreated();
-            }
-            catch (InvalidOperationException ex)
-                when (ex.Message.Contains("The process has no package identity"))
-            {
-                //Ignore this - sqlite needs signature
-            }
-        }
-
-        public AppHost Create(AppHost item)
-        {
-            _context.Add(item);
-            _context.SaveChanges();
-            return item;
-        }
-
-        public IEnumerable<AppHost> Read()
-        {
-            return _context.AppHosts.AsEnumerable();
-        }
-
-        public AppHost Update(AppHost existing, AppHost item = null)
-        {
-            if(item != null)
-            {
-                var vals = ModelService.GetPropertyValues(item);
-                foreach(var prop in ModelService.GetPropertyInfo(typeof(AppHost)))
-                {
-                    var newprop = vals.Where(x => x.Name == prop.Name).FirstOrDefault()?.Value;
-                    prop.SetValue(existing, newprop);
-                }
-            }
-
-            existing.Touch();
-            _context.Update(existing);
-            _context.SaveChanges();
-            return existing;
-        }
-
-        public int Delete(AppHost item)
-        {
-            _context.Remove(item);
-            return _context.SaveChanges();
-        }
-    }
-
 }

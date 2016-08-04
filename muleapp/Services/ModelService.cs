@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Mule
 {
@@ -45,17 +46,7 @@ namespace Mule
         /// <returns></returns>
         public static IEnumerable<PropertyInfo> GetPropertyInfo(Type type)
         {
-            //For collections (Arrays and Enumerables), get the properties of the inner type
-            if (typeof(IEnumerable).IsAssignableFrom(type))
-            {
-                var innertype = from i in type.GetInterfaces()
-                                where i.IsConstructedGenericType
-                                && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                                select i.GetGenericArguments()[0];
-                return innertype.First().GetProperties();
-            }
-            //For normal types, get the public properties
-            return type.GetProperties();
+            return ModelType(type).GetProperties();
         }
 
         /// <summary>
@@ -70,5 +61,37 @@ namespace Mule
                 yield return new PropertyValue(p, model);
             }
         }
+
+        /// <summary>
+        /// Detects model type from object or collection
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Type ModelType(Type type)
+        {
+            //For collections (Arrays and Enumerables), get the properties of the inner type
+            if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
+                var innertype = from i in type.GetInterfaces()
+                                where i.IsConstructedGenericType
+                                && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                                select i.GetGenericArguments()[0];
+                return innertype.First();
+            }
+            //For normal types, get the public properties
+            return type;
+        }
+
+        public static IEnumerable<Type> AllModels()
+        {
+            Assembly asm = Assembly.GetEntryAssembly();
+
+            return from t in asm.GetTypes()
+                   where typeof(Controller).IsAssignableFrom(t)
+                   && !t.GetTypeInfo().IsAbstract
+                   && t.GetTypeInfo().BaseType.IsConstructedGenericType
+                   select t.GetTypeInfo().BaseType.GetGenericArguments()[0];
+        }
+
     }
 }

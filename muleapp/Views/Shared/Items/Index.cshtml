@@ -1,5 +1,5 @@
 ﻿@using static Mule.ModelService;
-@model IEnumerable<AppHost>
+@model IEnumerable<object>
 
 @section scripts{
 <script type="text/javascript" >
@@ -22,6 +22,16 @@
 </script>
 }
 <div class="box">
+    <div class="tabs is-boxed is-medium">
+        <ul>
+            @foreach (var model in AllModels())
+            {
+                <li class='@string.Format("{0}", model.Name == ViewContext.RouteData.Values["controller"].ToString() ? "is-active" : "")'>
+                    @Html.ActionLink(model.Name,"Index", model.Name)
+                </li>
+            }
+        </ul>
+    </div>
     <table class="table is-striped">
         <thead>
             <tr>
@@ -50,7 +60,7 @@
     <div class="box">
         <div class="columns">
             <div class="column">
-                @{Html.RenderPartial("Create", new AppHost());}
+                @{Html.RenderPartial("Items/Create", Activator.CreateInstance(ModelType(Model.GetType())));}
             </div>
         </div>
     </div>

@@ -1,8 +1,8 @@
-﻿@model AppHost
+﻿@model object
 
 <div>
     <p class="control">
-        @using (Html.BeginForm("Create", "AppHost"))
+        @using (Html.BeginForm("Create", ViewContext.RouteData.Values["controller"].ToString()))
         {
             @Html.EditorForModel()
 
@@ -10,7 +10,7 @@
             <div class="form-group columns">
                 <div class="column">
                     <input type="submit" value="Save" class="button is-success" />
-                    @{Html.RenderPartial("Delete", Model);}
+                    @{Html.RenderPartial("Items/Delete", Model);}
                 </div>
             </div>
         }
