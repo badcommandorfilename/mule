@@ -20,16 +20,22 @@ You can use MULE as a seed app to build your own dashboards. Create your datamod
     {
         [Key]//Unique id for object
         public string URL { get; set; } = "";
+
+        string version = "";
         [Required] //Property cannot be null
-        public string Version { get; set; } = "";
-        [Required] //Property cannot be null
-        public string Owner { get; set; } = "";
+        public string Version { get { return version; } set { version = value ?? ""; } }
+
+        [DataType(DataType.MultilineText)] //Input style/formatting hint
+        public string Description { get; set; } = "";
+
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        public DateTime Touch() => Updated = DateTime.Now;
+        [HiddenInput(DisplayValue = false)] //Property won't show in edit form
+        [NotMapped] //Don't store this value in DB, calculate or set in controller
+        public int RTT { get; set; }
 
-        /// Equality Comparer (determines if row will be overwritten or created)
+        /// Equality Comparer (determines if DB row will be overwritten or created)
         public override bool Equals(object obj) => URL == (obj as AppHost)?.URL;
 
         /// Unique key definition (use primary key)

@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Mule
 {
@@ -24,12 +23,11 @@ namespace Mule
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        public AppHost()
-        {
+        [HiddenInput(DisplayValue = false)] //Property won't show in edit form
+        [NotMapped] //Don't store this value in DB, calculate or set in controller
+        public int RTT { get; set; }
 
-        }
-
-        /// Equality Comparer (determines if row will be overwritten or created)
+        /// Equality Comparer (determines if DB row will be overwritten or created)
         public override bool Equals(object obj) => URL == (obj as AppHost)?.URL;
 
         /// Unique key definition (use primary key)
