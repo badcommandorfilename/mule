@@ -23,7 +23,7 @@ namespace Mule.Controllers
                     cache.Set(item.URL, -1); //Set an intial value if the Ping fails
 
                     scheduler.ScheduleJob(new ConstantSchedule(), new SimpleJob(
-                        time => cache.Set(item.URL, (int)new Ping().Send(item.URL).RoundtripTime)
+                        time => cache.Set(item.URL, (int)new Ping().SendPingAsync(item.URL).Result.RoundtripTime)
                     ),
                     runImmediately: true); //Start background job to monitor RTT to host URLs
                 }
