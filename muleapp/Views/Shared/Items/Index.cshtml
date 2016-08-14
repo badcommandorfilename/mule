@@ -39,7 +39,7 @@
     <table class="table is-striped">
         <thead>
             <tr>
-                @foreach (var col in GetPropertyInfo(Model.GetType()))
+                @foreach (var col in GetMemberInfo(Model.GetType()))
                 {
                     <th>@col.Name.ToString()</th>
                 }

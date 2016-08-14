@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.NetworkInformation;
+using System.Diagnostics;
 
 namespace Mule
 {
@@ -23,9 +24,10 @@ namespace Mule
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        public CacheValue<AppHost, long> RTT = new CacheValue<AppHost, long>
+        public UpdatingValue<AppHost, double> RTT = new UpdatingValue<AppHost, double>
         {
-            Update = self => new Ping().SendPingAsync(self.URL).Result.RoundtripTime,
+            Update = self => { var s = new Stopwatch(); s.Start(); //Use stopwatch to get a sub-ms value
+                return new Ping().SendPingAsync(self.URL).Result.Status == IPStatus.Success ? (s.Elapsed.TotalMilliseconds): -1; }
         };
 
         /// Equality Comparer (determines if DB row will be overwritten or created)

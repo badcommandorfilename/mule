@@ -41,6 +41,19 @@ namespace Mule
             return ModelType(type).GetFields().Where(f => typeof(T).IsAssignableFrom(f.FieldType));
         }
 
+        public static IEnumerable<MemberInfo> GetMemberInfo(Type type)
+        {
+            foreach (var p in GetPropertyInfo(type))
+            {
+                yield return p;
+            }
+
+            foreach (var f in GetFieldInfo<ICacheValue>(type))
+            {
+                yield return f;
+            }
+        }
+
         /// <summary>
         /// Returns information and values of the public properties of a given type
         /// </summary>
@@ -55,10 +68,10 @@ namespace Mule
 
             if(cache != null)
             {
-                foreach (var f in GetFieldInfo<CacheValue>(model.GetType()))
+                foreach (var f in GetFieldInfo<ICacheValue>(model.GetType()))
                 {
                     var v = f.GetValue(model);
-                    yield return new KeyValuePair<string, object>(f.Name, (v as CacheValue).Value(cache, model) ?? "");
+                    yield return new KeyValuePair<string, object>(f.Name, (v as ICacheValue).Value(cache, model) ?? "");
                 }
             }
 
