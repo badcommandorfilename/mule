@@ -5,30 +5,10 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Mule
 {
-    /// <summary>
-    /// Encloses the state of a given object's property
-    /// </summary>
-    public class PropertyValue
-    {
-        readonly PropertyInfo p;
-        readonly object i;
-
-        public PropertyValue(PropertyInfo property, object item)
-        {
-            p = property;
-            i = item;
-        }
-
-        public string Name { get { return p.Name; } }
-
-        public object Value { get { return p.GetValue(i) ?? ""; } }
-
-        public IEnumerable<Attribute> Attributes { get { return p.GetCustomAttributes(); } }
-    }
-
     /// <summary>
     /// Utilities to automatically inspect or display the properties of models
     /// </summary>
@@ -36,7 +16,9 @@ namespace Mule
     {
         public static string ToJSON(object model)
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(
+                GetModelValues(model)
+                .ToDictionary(x => x.Key, x => x.Value));
         }
 
         /// <summary>
@@ -50,16 +32,36 @@ namespace Mule
         }
 
         /// <summary>
+        /// Returns information about the public properties of a given Type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static IEnumerable<FieldInfo> GetFieldInfo<T>(Type type)
+        {
+            return ModelType(type).GetFields().Where(f => typeof(T).IsAssignableFrom(f.FieldType));
+        }
+
+        /// <summary>
         /// Returns information and values of the public properties of a given type
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static IEnumerable<PropertyValue> GetPropertyValues(object model)
+        public static IEnumerable<KeyValuePair<string, object>> GetModelValues(object model, IMemoryCache cache = null)
         {
             foreach(var p in GetPropertyInfo(model.GetType()))
             {
-                yield return new PropertyValue(p, model);
+                yield return new KeyValuePair<string, object>(p.Name, p.GetValue(model) ?? "");
             }
+
+            if(cache != null)
+            {
+                foreach (var f in GetFieldInfo<CacheValue>(model.GetType()))
+                {
+                    var v = f.GetValue(model);
+                    yield return new KeyValuePair<string, object>(f.Name, (v as CacheValue).Value(cache, model) ?? "");
+                }
+            }
+
         }
 
         /// <summary>

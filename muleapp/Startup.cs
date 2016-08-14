@@ -18,26 +18,28 @@ namespace Mule
         }
 
         public IConfigurationRoot Configuration { get; }
+        public IServiceCollection Services { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Services = services;
             var connection = "Filename=db.sqlite";//Configuration.GetConnectionString("SQLite");
 
-            services.AddEntityFramework()
+            Services.AddEntityFramework()
                 .AddDbContext<SQLiteContext>(options =>
                     options.UseSqlite(connection)
                 );
 
-            services.AddMvc();
-            services.AddMemoryCache();
+            Services.AddMvc();
+            Services.AddMemoryCache();
 
             //Scoped services are injected into constructors that match the interface
-            services.AddScoped<IRepository<AppHost>, Repository<AppHost>>();
+            Services.AddScoped<IRepository<AppHost>, Repository<AppHost>>();
 
             //Singleton services are created on first injection and re-used
             var scheduler = Chroniton.Singularity.Instance; //Background task scheduler
-            services.AddSingleton<Chroniton.ISingularity>(scheduler);
+            Services.AddSingleton<Chroniton.ISingularity>(scheduler);
             scheduler.Start();
         }
 

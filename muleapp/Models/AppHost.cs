@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.NetworkInformation;
 
 namespace Mule
 {
@@ -23,14 +23,15 @@ namespace Mule
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
         public DateTime Updated { get; private set; } = DateTime.Now;
 
-        [HiddenInput(DisplayValue = false)] //Property won't show in edit form
-        [NotMapped] //Don't store this value in DB, calculate or set in controller
-        public int RTT { get; set; }
+        public CacheValue<AppHost, long> RTT = new CacheValue<AppHost, long>
+        {
+            Update = self => new Ping().SendPingAsync(self.URL).Result.RoundtripTime,
+        };
 
         /// Equality Comparer (determines if DB row will be overwritten or created)
         public override bool Equals(object obj) => URL == (obj as AppHost)?.URL;
 
-        /// Unique key definition (use primary key)
+        /// Unique key definition (for looking up CacheValues)
         public override int GetHashCode() => URL.GetHashCode();
     }
 }

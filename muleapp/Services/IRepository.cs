@@ -54,10 +54,10 @@ namespace Mule
         {
             if (item != null)
             {
-                var vals = ModelService.GetPropertyValues(item);
+                var vals = ModelService.GetModelValues(item);
                 foreach (var prop in ModelService.GetPropertyInfo(typeof(T)))
                 {
-                    var newprop = vals.Where(x => x.Name == prop.Name).FirstOrDefault()?.Value;
+                    var newprop = vals.Where(x => x.Key == prop.Name).FirstOrDefault().Value;
                     prop.SetValue(existing, newprop);
                 }
             }

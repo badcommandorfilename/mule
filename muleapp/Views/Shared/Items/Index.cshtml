@@ -1,4 +1,8 @@
-﻿@using static Mule.ModelService;
+﻿@using Microsoft.Extensions.Caching.Memory;
+@using static Mule.ModelService;
+
+@inject IMemoryCache MemoryCache
+
 @model IEnumerable<object>
 
 @section scripts{
@@ -46,7 +50,7 @@
             @foreach (var row in Model)
             {
                 <tr>
-                    @foreach (var col in GetPropertyValues(row))
+                    @foreach (var col in GetModelValues(row, MemoryCache))
                     {
                         <td>@col.Value.ToString()</td>
                     }
