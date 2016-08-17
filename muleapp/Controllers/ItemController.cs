@@ -66,7 +66,8 @@ namespace Mule.Controllers
             var sw = new Stopwatch();
             sw.Start();
             ViewData["Title"] = typeof(AppHost).Name;
-            ViewData["Ponies"] = new Random().NextDouble() > 0.9;
+            ViewData["Ponies"] = new Random().NextDouble() > 0.95;
+            ViewData["Nyan"] = new Random().NextDouble() > 0.85;
             ViewData["Stopwatch"] = sw;
             base.OnActionExecuting(context);
         }
