@@ -52,7 +52,7 @@
                 <tr>
                     @foreach (var col in GetModelValues(row, MemoryCache))
                     {
-                        <td>@col.Value.ToString()</td>
+                        <td>@Html.Raw(col.Value.ToString().Replace("\n","<br/>"))</td>
                     }
                     <td><a href="#" class="button" onclick="set_edit(@ToJSON(row))">Edit</a></td>
                 </tr>
