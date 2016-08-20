@@ -1,9 +1,27 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Mule
 {
+    public class RepositoryContext : DbContext
+    {
+        public IEnumerable<Type> ModelTypes { get; private set; }
+        public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) {
+            ModelTypes = ModelService.AllModels();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach(var t in ModelTypes) //Add all model classes to database context
+            {
+                modelBuilder.Entity(t)
+                .ToTable(t.FullName);
+            }
+        }
+    }
+
     /// <summary>
     /// Repository interface for data access
     /// Use this interface for dependency injection to mock or abstract persistence objects during testing
@@ -23,8 +41,8 @@ namespace Mule
     /// </summary>
     public class Repository<T> : IRepository<T> where T : class
     {
-        readonly SQLiteContext _context;
-        public Repository(SQLiteContext context)
+        readonly RepositoryContext _context;
+        public Repository(RepositoryContext context)
         {
             _context = context;
             try

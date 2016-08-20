@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Mule
 {
@@ -27,15 +28,24 @@ namespace Mule
             var connection = "Filename=db.sqlite";//Configuration.GetConnectionString("SQLite");
 
             Services.AddEntityFramework()
-                .AddDbContext<SQLiteContext>(options =>
-                    options.UseSqlite(connection)
+                .AddDbContext<RepositoryContext>(
+                    options => options.UseSqlite(connection)
                 );
 
             Services.AddMvc();
             Services.AddMemoryCache();
 
             //Scoped services are injected into constructors that match the interface
-            Services.AddScoped<IRepository<AppHost>, Repository<AppHost>>();
+            foreach (var t in ModelService.AllModels())
+            {
+                Type unbound_interface = typeof(IRepository<>);
+                Type unbound_instance = typeof(Repository<>);
+                Services.AddScoped(
+                    unbound_interface.MakeGenericType(t), //Bind reflected model type to interface
+                    unbound_instance.MakeGenericType(t) //Bind reflected model type to service
+                );
+            }
+            
 
             //Singleton services are created on first injection and re-used
             var scheduler = Chroniton.Singularity.Instance; //Background task scheduler

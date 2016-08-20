@@ -31,7 +31,7 @@
             @foreach (var model in AllModels())
             {
                 <li class='@string.Format("{0}", model.Name == ViewContext.RouteData.Values["controller"].ToString() ? "is-active" : "")'>
-                    @Html.ActionLink(model.Name,"Index", model.Name)
+                    @Html.ActionLink(model.Name, "Index", model.Name)
                 </li>
             }
         </ul>

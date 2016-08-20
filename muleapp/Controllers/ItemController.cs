@@ -6,7 +6,7 @@ using System.Linq;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Mule.Controllers
+namespace Mule
 {
     public abstract class ItemController<T> : Controller where T : class
     {

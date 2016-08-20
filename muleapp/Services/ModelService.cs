@@ -101,15 +101,20 @@ namespace Mule
             return type;
         }
 
+        /// <summary>
+        /// Discover all data models in the assembly
+        /// Models will have a Primary Key property with
+        /// System.ComponentModel.DataAnnotations.KeyAttribute
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<Type> AllModels()
         {
             Assembly asm = Assembly.GetEntryAssembly();
 
             return from t in asm.GetTypes()
-                   where typeof(Controller).IsAssignableFrom(t)
-                   && !t.GetTypeInfo().IsAbstract
-                   && t.GetTypeInfo().BaseType.IsConstructedGenericType
-                   select t.GetTypeInfo().BaseType.GetGenericArguments()[0];
+                   where t.GetProperties().Any(p => //Models must have a [Key] declared
+                        p.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>() != null)
+                   select t;
         }
     }
 }

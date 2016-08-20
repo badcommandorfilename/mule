@@ -37,4 +37,14 @@ namespace Mule
         /// Unique key definition (for looking up CacheValues)
         public override int GetHashCode() => URL.GetHashCode();
     }
+
+    [Route("")]
+    [Route("apphosts")]
+    public class AppHostController : ItemController<AppHost>
+    {
+        //Declare controller for routing
+        public AppHostController(IRepository<AppHost> repository) : base(repository)
+        {
+        }
+    }
 }
