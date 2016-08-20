@@ -6,6 +6,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq.Expressions;
 
 namespace Mule
 {
@@ -32,15 +33,10 @@ namespace Mule
         }
 
         /// <summary>
-        /// Returns information about the public properties of a given Type
+        /// Returns information about the public properties and methods of a given Type
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static IEnumerable<FieldInfo> GetFieldInfo<T>(Type type)
-        {
-            return ModelType(type).GetFields().Where(f => typeof(T).IsAssignableFrom(f.FieldType));
-        }
-
         public static IEnumerable<MemberInfo> GetMemberInfo(Type type)
         {
             foreach (var p in GetPropertyInfo(type))
@@ -48,14 +44,17 @@ namespace Mule
                 yield return p;
             }
 
-            foreach (var f in GetFieldInfo<ICacheValue>(type))
+            foreach (var f in 
+                from m in ModelType(type).GetMethods()
+                where m.GetCustomAttribute<CachedAttribute>() != null
+                select m )
             {
                 yield return f;
             }
         }
 
         /// <summary>
-        /// Returns information and values of the public properties of a given type
+        /// Returns information and values of the public properties and methods of a given type
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -68,13 +67,18 @@ namespace Mule
 
             if(cache != null)
             {
-                foreach (var f in GetFieldInfo<ICacheValue>(model.GetType()))
+                foreach (var f in ModelType(model.GetType()).GetMethods())
                 {
-                    var v = f.GetValue(model);
-                    yield return new KeyValuePair<string, object>(f.Name, (v as ICacheValue).Value(cache, model) ?? "");
+                    var a = f.GetCustomAttribute<CachedAttribute>();
+                    if(a != null)
+                    {
+                        var v = a.Value<object>(cache, 
+                            f.CreateDelegate(Expression.GetFuncType(f.ReturnType), 
+                            model));
+                        yield return new KeyValuePair<string, object>(f.Name, v ?? "");
+                    }
                 }
             }
-
         }
 
         /// <summary>
@@ -107,6 +111,5 @@ namespace Mule
                    && t.GetTypeInfo().BaseType.IsConstructedGenericType
                    select t.GetTypeInfo().BaseType.GetGenericArguments()[0];
         }
-
     }
 }
