@@ -65,7 +65,7 @@ namespace Mule
         {
             var sw = new Stopwatch();
             sw.Start();
-            ViewData["Title"] = typeof(AppHost).Name;
+            ViewData["Title"] = typeof(Weather).Name;
             ViewData["Ponies"] = new Random().NextDouble() > 0.95;
             ViewData["Nyan"] = new Random().NextDouble() > 0.85;
             ViewData["Stopwatch"] = sw;
