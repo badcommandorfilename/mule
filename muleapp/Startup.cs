@@ -38,8 +38,8 @@ namespace Mule
             //Scoped services are injected into constructors that match the interface
             foreach (var t in ModelService.AllModels())
             {
-                Type unbound_interface = typeof(IRepository<>);
-                Type unbound_instance = typeof(Repository<>);
+                Type unbound_interface = typeof(IRepository<>); //Interface for type construction
+                Type unbound_instance = typeof(Repository<>); //Constructed service class for dependency injection
                 Services.AddScoped(
                     unbound_interface.MakeGenericType(t), //Bind reflected model type to interface
                     unbound_instance.MakeGenericType(t) //Bind reflected model type to service
@@ -59,9 +59,10 @@ namespace Mule
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseDeveloperExceptionPage(); //Show exceptions and stacktrace
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
             else
@@ -72,7 +73,7 @@ namespace Mule
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = context =>
-                context.Context.Response.Headers.Add("Cache-Control", "public, max-age=86400")
+                    context.Context.Response.Headers.Add("Cache-Control", "public, max-age=86400")
             });
 
             app.UseMvc();

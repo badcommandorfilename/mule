@@ -1,5 +1,5 @@
 function getRandomInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-function getRandomPony() { return getRandomInt(0, 2) * getRandomInt(0, 2) * getRandomInt(0, 2) * getRandomInt(0, 2) * getRandomInt(0, 2); }
+function getRandomPony() { return getRandomInt(0, 2) * getRandomInt(0, 3) * getRandomInt(0, 4) + 1; }
 var altura = 800, largura = 600, rainbow = null;
 function egg1() {
     if ($(".nyan").length !== 1) { return; } //Credit: https://codepen.io/brunorcunha/

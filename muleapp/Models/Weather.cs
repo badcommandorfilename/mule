@@ -30,7 +30,7 @@ namespace Mule
         {
             var response = apiResponse();
             var degf = response.query.results.channel.item.condition.temp; //In Fahrenheit
-            return ((degf - 32) * 5) / 9;
+            return ((degf - 32) * 5) / 9; //In Celsius
         }
 
         ///Private method, won't show in View. See https://developer.yahoo.com/weather/
@@ -61,10 +61,10 @@ namespace Mule
     [Route("")]
     [Route("weather")]
     //Declare controller for routing
-    public class AppHostController : ItemController<Weather>
+    public class WeatherController : ItemController<Weather>
     {
         //Default actions inherit from ItemController
-        public AppHostController(IRepository<Weather> repository) : base(repository)
+        public WeatherController(IRepository<Weather> repository) : base(repository)
         {
         }
     }

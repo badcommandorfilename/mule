@@ -7,14 +7,14 @@
     <title>@ViewData["Title"] - Magical Unicorn Land (Enterprise Edition)</title>
     <link href="~/css/site.min.css" rel="stylesheet" />
 </head>
-<body onload="egg1()">
+<body id="background" onload="egg1()">
     <div class="main">
         <section class="hero box">
             <div class="hero-body">
                 <div class="container is-fluid">
                     <div class="columns">
                         <div class="column">
-                            <img src="~/img/unikitty.png" onclick="egg2()"/>
+                            <img src="~/img/unikitty.png" onmouseout="egg2()"/>
                         </div>
                         <div class="column">
                             <p class="title">
@@ -74,7 +74,7 @@
         {
             <script type="text/javascript" src="https://panzi.github.io/Browser-Ponies/basecfg.js" id="browser-ponies-config"></script>
             <script type="text/javascript" src="https://panzi.github.io/Browser-Ponies/browserponies.js" id="browser-ponies-script"></script>
-            <script type="text/javascript">/* <![CDATA[ */ (function (cfg) { BrowserPonies.setBaseUrl(cfg.baseurl); BrowserPonies.loadConfig(BrowserPoniesBaseConfig); BrowserPonies.loadConfig(cfg); })({ "baseurl": "https://panzi.github.io/Browser-Ponies/", "fadeDuration": 500, "volume": 0, "fps": 25, "speed": 3, "audioEnabled": false, "showFps": false, "showLoadProgress": false, "speakProbability": 0.1, "spawn": { "applejack": 1, "fluttershy": 1, "pinkie pie": 1, "rainbow dash": 1, "rarity": 1, "twilight sparkle": 1 },"spawnRandom":getRandomPony(), "autostart": true }); /* ]]> */</script>
+            <script type="text/javascript">/* <![CDATA[ */ (function (cfg) { BrowserPonies.setBaseUrl(cfg.baseurl); BrowserPonies.loadConfig(BrowserPoniesBaseConfig); BrowserPonies.loadConfig(cfg); })({ "baseurl": "https://panzi.github.io/Browser-Ponies/", "fadeDuration": 500, "volume": 0, "fps": 25, "speed": 3, "audioEnabled": false, "showFps": false, "showLoadProgress": false, "speakProbability": 0.1, "spawn": { "applejack": 1, "fluttershy": 1, "pinkie pie": 1, "rainbow dash": 1, "rarity": 1, "twilight sparkle": 1 },"spawnRandom": getRandomPony(), "autostart": true }); /* ]]> */</script>
         }
         @RenderSection("scripts", required: false)
 </body>
