@@ -1,9 +1,9 @@
 function getRandomInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
 function getRandomPony() { return getRandomInt(0, 2) * getRandomInt(0, 3) * getRandomInt(0, 4) + 1; }
-var altura = 800, largura = 600, rainbow = null;
+var altura = 800, largura = 1200, rainbow = null;
 function egg1() {
     if ($(".nyan").length !== 1) { return; } //Credit: https://codepen.io/brunorcunha/
-    largura = parseInt($("body").width()); function criarEstrela() { var a = getRandomInt(3, 14), b = getRandomInt(5, 10), c = $('<div class="star"/>').css({ width: a + "px", height: a + "px", left: largura - 10 + "px", top: Math.floor(Math.random() * altura + 1), "-webkit-transition": "all " + b + "s linear", "-webkit-transform": "translate(0px, 0px)" }); $("body").append(c), window.setTimeout(function () { c.css({ "-webkit-transform": "translate(-" + largura + "px, 0px)" }) }, 10 * getRandomInt(5, 10)), window.setTimeout(function () { c.remove() }, 1e3 * b) } window.setInterval(function () { criarEstrela() }, 300);
+    largura = parseInt($("body").width()); function criarEstrela() { var a = getRandomInt(3, 14), b = getRandomInt(10, 40), c = $('<a class="star" href="/error/Sudden Death"></>').css({ width: a + "px", height: a + "px", left: largura - 10 + "px", top: Math.floor(Math.random() * altura + 1), "-webkit-transition": "all " + b + "s linear", "-webkit-transform": "translate(0px, 0px)" }); $("body").append(c), window.setTimeout(function () { c.css({ "-webkit-transform": "translate(-" + largura + "px, 0px)" }) }, 10 * getRandomInt(5, 10)), window.setTimeout(function () { c.remove() }, 1e3 * b) } window.setInterval(function () { criarEstrela() }, 300);
 };
 function egg2() {
     if ($(".nyan").length !== 1 || rainbow !== null) { return; } //Credit: https://codepen.io/brunorcunha/

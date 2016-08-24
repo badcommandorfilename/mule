@@ -59,16 +59,8 @@ namespace Mule
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseDeveloperExceptionPage(); //Show exceptions and stacktrace
-
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Shared/Error");
-            }
+            app.UseStatusCodePagesWithRedirects("~/error/{0}"); //Client error page (e.g. for 404)
+            app.UseDeveloperExceptionPage(); //Internal exception page for debugging
 
             app.UseStaticFiles(new StaticFileOptions
             {

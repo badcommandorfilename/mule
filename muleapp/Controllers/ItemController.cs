@@ -63,12 +63,8 @@ namespace Mule
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var sw = new Stopwatch();
-            sw.Start();
             ViewData["Title"] = typeof(T).Name; //Model class name
-            ViewData["Ponies"] = new Random().NextDouble() > 0.95;
-            ViewData["Nyan"] = new Random().NextDouble() > 0.85;
-            ViewData["Stopwatch"] = sw;
+            ViewData["Stopwatch"] = Stopwatch.StartNew();
             base.OnActionExecuting(context);
         }
     }

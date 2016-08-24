@@ -1,5 +1,8 @@
-﻿@using System.Diagnostics;
-@using static System.Runtime.InteropServices.RuntimeInformation
+﻿@{ 
+    ViewData["Ponies"] = new Random().NextDouble() > 0.95;
+    ViewData["Nyan"] = new Random().NextDouble() > 0.55;
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,31 +10,9 @@
     <title>@ViewData["Title"] - Magical Unicorn Land (Enterprise Edition)</title>
     <link href="~/css/site.min.css" rel="stylesheet" />
 </head>
-<body id="background" onload="egg1()">
+<body class="background" id="unicorn_bg" onload="egg1()">
     <div class="main">
-        <section class="hero box">
-            <div class="hero-body">
-                <div class="container is-fluid">
-                    <div class="columns">
-                        <div class="column">
-                            <img src="~/img/unikitty.png" onmouseout="egg2()"/>
-                        </div>
-                        <div class="column">
-                            <p class="title">
-                                <b>M U L E</b>
-                            </p>
-                            <p class="subtitle">
-                            <p>Magical Unicorn Land</p>
-                            <p>
-                                <small>
-                                    <i>Enterprise Edition</i>
-                                </small>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        @{Html.RenderPartial("_Header");}
         <br />
         <section>
             <div>
@@ -44,31 +25,13 @@
         <div class="push">
             <br />
         </div>
+
     </div>
     @if ((ViewData["Nyan"] as bool?) ?? false)
     {
-        <div class="nyan"></div>
+        <div class="nyan" onmouseout="egg2()" ></div>
     }
-    <div class="footer">
-        <footer>
-            <div class="container">
-                <div class="content has-text-centered">
-                    <div class="columns">
-                        <div class="column">
-                            <p class="notification"><strong>Magical Unicorn Land</strong> by <a href="https://github.com/badcommandorfilename/">Alex Jarkey</a></p>
-                        </div>
-                        <div class="column">
-                            <p class="notification"><small>@($"{FrameworkDescription}({OSDescription})"), completed in @((ViewData["Stopwatch"] as Stopwatch).Elapsed.TotalMilliseconds.ToString("G3")) ms</small></p>
-                        </div>
-                        
-                        <div class="column">
-                            <p class="notification"><a href="https://github.com/badcommandorfilename/mule" class="button is-dark is-outlined" style="{}">Clone A Mule!</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
+    @{Html.RenderPartial("_Footer");}
         <script src="~/js/site.min.js" type="text/javascript"></script>
         @if ((ViewData["Ponies"] as bool?) ?? false)
         {

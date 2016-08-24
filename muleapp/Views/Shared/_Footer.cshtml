@@ -1,0 +1,22 @@
+﻿@using System.Diagnostics;
+@using static System.Runtime.InteropServices.RuntimeInformation
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="content has-text-centered">
+                <div class="columns">
+                    <div class="column">
+                        <p class="notification"><strong>Magical Unicorn Land</strong> by <a href="https://github.com/badcommandorfilename/">Alex Jarkey</a></p>
+                    </div>
+                    <div class="column">
+                        <p class="notification"><small>@($"{FrameworkDescription}({OSDescription})"), completed in @((ViewData["Stopwatch"] as Stopwatch)?.Elapsed.TotalMilliseconds.ToString("G3")) ms</small></p>
+                    </div>
+
+                    <div class="column">
+                        <p class="notification"><a href="https://github.com/badcommandorfilename/mule" class="button is-dark is-outlined" style="{}">Clone A Mule!</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

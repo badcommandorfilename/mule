@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Error";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Magical Unicorn Land (Enterprise Edition)</title>
+    <link href="~/css/site.min.css" rel="stylesheet" />
+</head>
+<body class="background" id="unicorn_bg2">
+    <div class="main">
+        <br />
+        <section>
+            <div>
+                @RenderBody()
+            </div>
+        </section>
+        <div class="push">
+            <br />
+        </div>
+        <div class="push">
+            <br />
+        </div>
+
+    </div>
+    @{Html.RenderPartial("_Footer");}
+    <script src="~/js/site.min.js" type="text/javascript"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
