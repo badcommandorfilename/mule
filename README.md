@@ -1,19 +1,21 @@
 # MULE
 ## Magical Unicorn Land (Enterprise Edition)
-![Nyancat Loves MULE](https://github.com/badcommandorfilename/mule/blob/master/muleapp/wwwroot/img/nyancat.png)
+![Robocorn loves MULE](https://s-media-cache-ak0.pinimg.com/236x/26/18/64/261864688a35b354af71a5da97c4a457.jpg)
 
-C# NET Core MVC Web UI for CRUD actions on a simple collection of objects
+C# NET Core Web UI for sharing a simple collection of custom objects with your team.
 
 ## Wow!
 
 MULE is just a simple Web UI that wraps up Create, Read, Update and Delete actions on an SQLite database.
 
 Have you ever had a conversation that goes like this?
->  "Well, in an ideal world, with magic and unicorns, we'd have a cool web portal where people could log in and update which servers they were using and what version of the software they were running! Until then, I guess we'll all just put post-it notes everywhere and track everything on this ugly whiteboard."
+>  "Well, in an ideal world, with magic and unicorns, we'd have a cool web portal where people could log in and update which servers they were using and what version of the software they were running! Until then, I guess we'll all just leave post-it notes everywhere and track everything on this ugly whiteboard."
 
 ## Such Magic!
 
-You can use MULE as a seed app to build your own dashboards. Create your datamodel class as shown below, and the view engine will magically update the GUI for you! Create as many models as you want!
+You can use MULE as a seed app to build and share your own dashboards. Create your datamodel class as shown below, and the view engine will magically update the GUI for you! Add methods to calculate or scrape live data from other sources.
+
+Create as many models as you want!
 
 ```csharp
     /// Example model class - we want to show weather information scraped from yahoo.com/weather/
@@ -40,7 +42,7 @@ You can use MULE as a seed app to build your own dashboards. Create your datamod
         {
             var response = apiResponse();
             var degf = response.query.results.channel.item.condition.temp; //In Fahrenheit
-            return ((degf - 32) * 5) / 9;
+            return ((degf - 32) * 5) / 9; //In Celsius
         }
 
         ///Private method, won't show in View. See https://developer.yahoo.com/weather/
@@ -71,10 +73,10 @@ You can use MULE as a seed app to build your own dashboards. Create your datamod
     [Route("")]
     [Route("weather")]
     //Declare controller for routing
-    public class AppHostController : ItemController<Weather>
+    public class WeatherController : ItemController<Weather>
     {
         //Default actions inherit from ItemController
-        public AppHostController(IRepository<Weather> repository) : base(repository)
+        public WeatherController(IRepository<Weather> repository) : base(repository)
         {
         }
     }
