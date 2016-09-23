@@ -48,6 +48,8 @@ namespace Mule
             try
             {
                 context.Database.EnsureCreated();
+                context.Database.Migrate();
+                context.SaveChanges();
             }
             catch (InvalidOperationException ex)
                 when (ex.Message.Contains("The process has no package identity"))
@@ -73,7 +75,8 @@ namespace Mule
             if (item != null)
             {
                 var vals = ModelService.GetModelValues(item);
-                foreach (var prop in ModelService.GetPropertyInfo(typeof(T)))
+                foreach (var prop in ModelService.GetPropertyInfo(typeof(T)) //Update the saved model
+                    .Where(p => p.SetMethod != null && p.SetMethod.IsPublic)) //If there is a public setter
                 {
                     var newprop = vals.Where(x => x.Key == prop.Name).FirstOrDefault().Value;
                     prop.SetValue(existing, newprop);

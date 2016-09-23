@@ -16,7 +16,7 @@ namespace Mule
         public string Description { get; set; } = "";
 
         [HiddenInput(DisplayValue = false)] //Property won't show in edit form
-        public DateTime Updated { get; private set; } = DateTime.Now;
+        public DateTime Updated => DateTime.Now;
 
         [Cached(ExpireSeconds = 600)] //The result of this method is cached for 10m
         public string Condition()
@@ -34,21 +34,14 @@ namespace Mule
         }
 
         ///Private method, won't show in View. See https://developer.yahoo.com/weather/
-        string apiURL() =>
+        string apiURL =>
             $"https://query.yahooapis.com/v1/public/yql?q=select item.condition from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"{City.ToLower()}\")&format=json";
 
         /// Expecting {"query":{"count":1,"results":{"channel":{"item":{"condition":{"temp":"51","text":"Showers"}}}}}}
         dynamic apiResponse()
         {
-            using (var handler = new HttpClientHandler()) //Context for http requests
-            {
-                handler.ServerCertificateCustomValidationCallback = delegate { return true; }; //Ignore self-signed cert
-                using (var client = new HttpClient(handler))
-                {   
-                    var response = client.GetStringAsync(apiURL()).Result;
-                    return JsonConvert.DeserializeObject(response); //Convert JSON into a C# object
-                }
-            }
+            var response = client.Value.GetStringAsync(apiURL).Result;
+            return JsonConvert.DeserializeObject(response); //Convert JSON into a C# object
         }
 
         /// Equality Comparer (determines if DB row will be overwritten or created)
@@ -56,6 +49,13 @@ namespace Mule
 
         /// Unique key definition (for looking up CacheValues)
         public override int GetHashCode() => City.GetHashCode();
+
+        static HttpClientHandler handler = new HttpClientHandler(); //Context for http requests
+        static Lazy<HttpClient> client = new Lazy<HttpClient>(() =>
+        {
+            handler.ServerCertificateCustomValidationCallback = delegate { return true; }; //Ignore self-signed cert
+            return new HttpClient(handler); //Shared http client
+        });
     }
 
     [Route("")]
