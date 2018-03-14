@@ -27,7 +27,7 @@ namespace Mule
             Services = services;
             var connection = "Filename=db.sqlite";//Configuration.GetConnectionString("SQLite");
 
-            Services.AddEntityFramework()
+            Services.AddEntityFrameworkSqlite()
                 .AddDbContext<RepositoryContext>(
                     options => options.UseSqlite(connection)
                 );
